@@ -32,8 +32,10 @@ export default function CheckoutPage() {
   const [placed, setPlaced] = useState(false);
 
   useEffect(() => {
+    // sessionStorage is browser-only, so the order can only be read after mount.
     const raw = sessionStorage.getItem("mcp_order");
-    if (raw) setOrder(JSON.parse(raw));
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    if (raw) setOrder(JSON.parse(raw) as Order);
   }, []);
 
   return (

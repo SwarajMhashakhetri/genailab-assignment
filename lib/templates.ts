@@ -1,8 +1,8 @@
 /* ------------------------------------------------------------------ *
  *  Story templates + art styles
- *  Mirrors the real My Clever Pages catalogue. Cover art is rendered
- *  as warm gradients + motifs so the prototype is fully self-contained
- *  (drop real artwork into /public/samples and swap `cover` for a src).
+ *  Mirrors the real My Clever Pages catalogue. Each entry has real cover
+ *  / style artwork (`image`, served from /public/mcp) over a warm gradient
+ *  fallback (`cover`). Swap the artwork by changing the `image` paths.
  * ------------------------------------------------------------------ */
 
 export type StoryId =
@@ -34,7 +34,7 @@ export const STORIES: StoryTemplate[] = [
       "A warm, reassuring story about the excitement and butterflies of starting school — and discovering how brave they already are.",
     ageRange: "3–6",
     emoji: "🎒",
-    image: "/mcp/school-adventure.png",
+    image: "/mcp/school-adventure.webp",
     cover: "linear-gradient(135deg, #f6d39a 0%, #ea6a47 100%)",
     accent: "#ea6a47",
   },
@@ -46,7 +46,7 @@ export const STORIES: StoryTemplate[] = [
       "Blast off through the solar system, meet friendly planets, and learn how the universe works on a bedtime space mission.",
     ageRange: "4–8",
     emoji: "🚀",
-    image: "/mcp/cosmic-adventure.png",
+    image: "/mcp/cosmic-adventure.webp",
     cover: "linear-gradient(135deg, #5b6ee1 0%, #2f2a6b 100%)",
     accent: "#5b6ee1",
   },
@@ -58,7 +58,7 @@ export const STORIES: StoryTemplate[] = [
       "A royal tale where every colorful fruit and vegetable holds a little magic — and good food makes a brave, kind ruler.",
     ageRange: "3–7",
     emoji: "👑",
-    image: "/mcp/princes-world.png",
+    image: "/mcp/princes-world.webp",
     cover: "linear-gradient(135deg, #f7a8c4 0%, #b5479a 100%)",
     accent: "#b5479a",
   },
@@ -70,7 +70,7 @@ export const STORIES: StoryTemplate[] = [
       "A gentle rhyming journey from A to Z, with a personalized wish for your child woven through every letter of the alphabet.",
     ageRange: "2–5",
     emoji: "🔤",
-    image: "/mcp/abc-wishesh.png",
+    image: "/mcp/abc-wishesh.webp",
     cover: "linear-gradient(135deg, #7fd1c1 0%, #2f6f6a 100%)",
     accent: "#2f6f6a",
   },
@@ -100,7 +100,7 @@ export const STYLES: ArtStyle[] = [
     description:
       "Soft, rounded picture-book illustration — the classic, cuddly look children adore.",
     emoji: "🖍️",
-    image: "/mcp/storybook-style.png",
+    image: "/mcp/storybook-style.webp",
     swatch: "linear-gradient(135deg, #f6d39a, #ea6a47)",
   },
   {
@@ -109,7 +109,7 @@ export const STYLES: ArtStyle[] = [
     description:
       "Dreamy, hand-painted washes of color — gentle, artistic and timeless.",
     emoji: "🎨",
-    image: "/mcp/water-color-style.png",
+    image: "/mcp/water-color-style.webp",
     swatch: "linear-gradient(135deg, #d3e6e3, #7fd1c1)",
   },
   {
@@ -118,7 +118,7 @@ export const STYLES: ArtStyle[] = [
     description:
       "Rich, true-to-life rendering that keeps every detail of your child's smile.",
     emoji: "📷",
-    image: "/mcp/liflike-style.png",
+    image: "/mcp/liflike-style.webp",
     swatch: "linear-gradient(135deg, #f7dccf, #b5479a)",
   },
 ];

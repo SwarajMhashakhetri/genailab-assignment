@@ -99,6 +99,8 @@ export function PreviewStep() {
       startedRef.current = true;
       generate();
     } else if (generatedImage) {
+      // Returning to a step that already has art — show it immediately.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setStatus("done");
     }
   }, [generate, generatedImage]);
@@ -270,12 +272,12 @@ export function PreviewStep() {
           setRegenOpen(false);
           // Drop the old art so a fresh one is painted for the new story.
           setGeneratedImage(null);
-          goTo(1);
+          goTo(2); // Story step
         }}
         onChangePhoto={() => {
           setRegenOpen(false);
           setGeneratedImage(null);
-          goTo(3);
+          goTo(0); // Photo step
         }}
       />
     </div>

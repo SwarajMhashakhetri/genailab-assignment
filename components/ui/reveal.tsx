@@ -79,3 +79,62 @@ export function StaggerItem({
     </motion.div>
   );
 }
+
+/**
+ * Like <Stagger> but driven by mount (animate) instead of scroll (whileInView).
+ * Use for wizard/form steps whose elements should cascade in the moment the
+ * step appears. Honors prefers-reduced-motion.
+ */
+export function RevealGroup({
+  children,
+  className,
+  gap = 0.08,
+  delay = 0.04,
+}: {
+  children: ReactNode;
+  className?: string;
+  gap?: number;
+  delay?: number;
+}) {
+  const reduce = useReducedMotion();
+  const container: Variants = {
+    hidden: {},
+    show: {
+      transition: {
+        staggerChildren: reduce ? 0 : gap,
+        delayChildren: reduce ? 0 : delay,
+      },
+    },
+  };
+  return (
+    <motion.div
+      className={className}
+      variants={container}
+      initial="hidden"
+      animate="show"
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+export function RevealItem({
+  children,
+  className,
+  y = 16,
+}: {
+  children: ReactNode;
+  className?: string;
+  y?: number;
+}) {
+  const reduce = useReducedMotion();
+  const item: Variants = {
+    hidden: reduce ? { opacity: 0 } : { opacity: 0, y },
+    show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: EASE } },
+  };
+  return (
+    <motion.div className={className} variants={item}>
+      {children}
+    </motion.div>
+  );
+}

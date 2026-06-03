@@ -42,8 +42,8 @@ export function UploadStep() {
   return (
     <div className="mx-auto max-w-2xl text-center">
       <StepHeading
-        eyebrow="Last step ✨"
-        title={`Now, let's bring ${hero} to life`}
+        eyebrow="Step one ✨"
+        title="Let's start with a photo"
         subtitle="One clear, front-facing photo — like a school photo — is all it takes. We keep that sweet face recognizable in every illustration."
       />
 
@@ -123,13 +123,16 @@ export function StepHeading({
   eyebrow,
   title,
   subtitle,
+  align = "center",
 }: {
   eyebrow: string;
   title: string;
   subtitle?: string;
+  align?: "center" | "left";
 }) {
+  const left = align === "left";
   return (
-    <div>
+    <div className={left ? "text-left" : "text-center"}>
       <span className="inline-block rounded-full bg-coral-soft px-3 py-1 text-xs font-bold uppercase tracking-wider text-coral-dark">
         {eyebrow}
       </span>
@@ -137,7 +140,14 @@ export function StepHeading({
         {title}
       </h1>
       {subtitle && (
-        <p className="mx-auto mt-3 max-w-xl text-lg text-ink-soft">{subtitle}</p>
+        <p
+          className={cn(
+            "mt-3 max-w-xl text-lg text-ink-soft",
+            !left && "mx-auto"
+          )}
+        >
+          {subtitle}
+        </p>
       )}
     </div>
   );

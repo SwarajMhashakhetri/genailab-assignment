@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "motion/react";
 import { Minus, Plus } from "lucide-react";
 import { useStudio } from "./studio-context";
 import { StepHeading } from "./upload-step";
+import { RevealGroup, RevealItem } from "@/components/ui/reveal";
 
 export function DetailsStep() {
   const { name, setName, age, setAge } = useStudio();
@@ -18,15 +19,18 @@ export function DetailsStep() {
   }, [name]);
 
   return (
-    <div className="mx-auto max-w-xl text-center">
-      <StepHeading
-        eyebrow="Let's begin"
-        title="Who are we making a book for?"
-        subtitle="Just a first name to start — we'll weave it through every single page."
-      />
+    <RevealGroup className="w-full">
+      <RevealItem>
+        <StepHeading
+          align="left"
+          eyebrow="A few details"
+          title="Who are we making a book for?"
+          subtitle="Just a first name to start — we'll weave it through every single page."
+        />
+      </RevealItem>
 
-      <div className="mt-10 space-y-8 text-left">
-        <div>
+      <div className="mt-8 space-y-7">
+        <RevealItem>
           <label
             htmlFor="child-name"
             className="mb-2 block text-base font-bold text-ink"
@@ -43,9 +47,9 @@ export function DetailsStep() {
             maxLength={20}
             className="w-full rounded-2xl border border-line bg-paper px-5 py-4 text-xl text-ink shadow-sm outline-none transition placeholder:text-ink-faint focus:border-coral"
           />
-        </div>
+        </RevealItem>
 
-        <div>
+        <RevealItem>
           <span className="mb-2 block text-base font-bold text-ink">
             How old are they?
           </span>
@@ -73,9 +77,9 @@ export function DetailsStep() {
               <Plus className="h-5 w-5" />
             </button>
           </div>
-        </div>
+        </RevealItem>
 
-        <div className="min-h-14 text-center">
+        <div className="min-h-14">
           <AnimatePresence mode="wait">
             {settledName && (
               <motion.p
@@ -92,6 +96,6 @@ export function DetailsStep() {
           </AnimatePresence>
         </div>
       </div>
-    </div>
+    </RevealGroup>
   );
 }

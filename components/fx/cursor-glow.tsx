@@ -18,6 +18,8 @@ export function CursorGlow() {
     const fine = window.matchMedia("(pointer: fine)").matches;
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (!fine || reduced) return;
+    // Capability detection is browser-only; enabling after mount is intended.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setEnabled(true);
 
     const move = (e: MouseEvent) => {

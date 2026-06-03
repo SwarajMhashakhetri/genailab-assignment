@@ -5,6 +5,7 @@ import { Check } from "lucide-react";
 import { STORIES } from "@/lib/templates";
 import { useStudio } from "./studio-context";
 import { StepHeading } from "./upload-step";
+import { RevealGroup, RevealItem } from "@/components/ui/reveal";
 import { cn } from "@/lib/utils";
 
 export function TemplateStep() {
@@ -12,29 +13,32 @@ export function TemplateStep() {
   const hero = name.trim() || "your child";
 
   return (
-    <div className="mx-auto max-w-4xl text-center">
-      <StepHeading
-        eyebrow="The story"
-        title={`Which world should ${hero} explore?`}
-        subtitle={`Every tale is written with ${hero} as the hero. Preview any of them — there's no commitment.`}
-      />
+    <RevealGroup className="w-full">
+      <RevealItem>
+        <StepHeading
+          align="left"
+          eyebrow="The story"
+          title={`Which world should ${hero} explore?`}
+          subtitle={`Every tale is written with ${hero} as the hero. Preview any of them — there's no commitment.`}
+        />
+      </RevealItem>
 
-      <div className="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-2">
+      <div className="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2">
         {STORIES.map((s) => {
           const selected = story === s.id;
           return (
-            <button
-              key={s.id}
-              type="button"
-              onClick={() => setStory(s.id)}
-              aria-pressed={selected}
-              className={cn(
-                "group relative flex items-stretch gap-4 overflow-hidden rounded-3xl border bg-paper p-4 text-left transition-all duration-300",
-                selected
-                  ? "border-coral shadow-lift ring-2 ring-coral"
-                  : "border-line hover:-translate-y-1 hover:shadow-soft"
-              )}
-            >
+            <RevealItem key={s.id} className="h-full">
+              <button
+                type="button"
+                onClick={() => setStory(s.id)}
+                aria-pressed={selected}
+                className={cn(
+                  "group relative flex h-full w-full items-stretch gap-4 overflow-hidden rounded-3xl border bg-paper p-4 text-left transition-all duration-300",
+                  selected
+                    ? "border-coral shadow-lift ring-2 ring-coral"
+                    : "border-line hover:-translate-y-1 hover:shadow-soft"
+                )}
+              >
               <div
                 className="relative h-28 w-24 shrink-0 overflow-hidden rounded-2xl"
                 style={{ background: s.cover }}
@@ -59,15 +63,16 @@ export function TemplateStep() {
                   Ages {s.ageRange}
                 </span>
               </div>
-              {selected && (
-                <span className="absolute right-4 top-4 flex h-7 w-7 items-center justify-center rounded-full bg-coral text-white">
-                  <Check className="h-4 w-4" />
-                </span>
-              )}
-            </button>
+                {selected && (
+                  <span className="absolute right-4 top-4 flex h-7 w-7 items-center justify-center rounded-full bg-coral text-white">
+                    <Check className="h-4 w-4" />
+                  </span>
+                )}
+              </button>
+            </RevealItem>
           );
         })}
       </div>
-    </div>
+    </RevealGroup>
   );
 }

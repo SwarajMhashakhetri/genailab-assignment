@@ -10,11 +10,10 @@ import {
 } from "react";
 import type { StoryId, StyleId } from "@/lib/templates";
 
-// Funnel order is deliberate. We ask the child's NAME first (frictionless,
-// and it personalizes every screen that follows → endowment effect), then the
-// easy creative choices, and we save the PHOTO — the one bit of real effort —
-// for last, when the parent is already invested.
-export const STEPS = ["Hero", "Story", "Style", "Photo", "Preview"] as const;
+// The photo comes FIRST and then stays pinned as a static, building preview
+// while the parent fills in the remaining details — the uploaded face is the
+// emotional anchor of the whole experience, kept in view the entire time.
+export const STEPS = ["Photo", "Details", "Story", "Style", "Preview"] as const;
 
 interface StudioState {
   step: number;
@@ -58,19 +57,21 @@ export function StudioProvider({ children }: { children: ReactNode }) {
   // finish what they've started).
   useEffect(() => {
     const seeded = new URLSearchParams(window.location.search).get("name");
+    // The query string is browser-only; seed once after mount.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     if (seeded) setName(seeded.trim().slice(0, 20));
   }, []);
 
   const canAdvance = useMemo(() => {
     switch (step) {
       case 0:
-        return name.trim().length > 0;
+        return !!file; // Photo
       case 1:
-        return !!story;
+        return name.trim().length > 0; // Details
       case 2:
-        return !!style;
+        return !!story; // Story
       case 3:
-        return !!file;
+        return !!style; // Style
       default:
         return false;
     }

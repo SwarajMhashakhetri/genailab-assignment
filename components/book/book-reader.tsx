@@ -14,6 +14,14 @@ const FlipBook = HTMLFlipBook as unknown as React.ComponentType<
   Record<string, unknown> & { children: React.ReactNode }
 >;
 
+// Minimal shape of the StPageFlip instance we actually call.
+type PageFlipApi = {
+  flipNext: () => void;
+  flipPrev: () => void;
+  flip: (page: number) => void;
+};
+type FlipBookHandle = { pageFlip: () => PageFlipApi | undefined };
+
 const Page = React.forwardRef<
   HTMLDivElement,
   { children: React.ReactNode; className?: string }
@@ -33,7 +41,7 @@ export function BookReader({
   story: StoryTemplate;
   generatedImage: string | null;
 }) {
-  const bookRef = React.useRef<any>(null);
+  const bookRef = React.useRef<FlipBookHandle | null>(null);
   const wrapRef = React.useRef<HTMLDivElement>(null);
   const [page, setPage] = React.useState(0);
   const [isFs, setIsFs] = React.useState(false);

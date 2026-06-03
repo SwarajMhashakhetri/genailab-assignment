@@ -4,7 +4,8 @@ import { buildPrompt } from "@/lib/prompts";
 import type { StoryId, StyleId } from "@/lib/templates";
 
 export const runtime = "nodejs";
-export const maxDuration = 120;
+// 60s is the ceiling on Vercel's Hobby plan; raise to 300 on Pro if needed.
+export const maxDuration = 60;
 
 export async function POST(req: Request) {
   if (!process.env.OPENAI_API_KEY) {
