@@ -1,26 +1,317 @@
 @import "tailwindcss";
 
+/* ------------------------------------------------------------------ *
+ *  My Clever Pages — design tokens
+ *  Brand palette + fonts mirrored from mycleverpages.org:
+ *  walnut brown (#4e321e) + sage green (#698e62) on warm cream.
+ *  Token NAMES are kept (coral/teal/…) so the whole app re-themes
+ *  off these values — "coral" is now walnut, "teal" is now sage.
+ * ------------------------------------------------------------------ */
+@theme {
+  /* Surfaces */
+  --color-cream: #f6f2ea;
+  --color-paper: #ffffff;
+  --color-sand: #ece2d1;
+
+  /* Ink / text — deep espresso brown */
+  --color-ink: #2b2018;
+  --color-ink-soft: #6b5a49;
+  --color-ink-faint: #a3917f;
+
+  /* Brand — primary = walnut brown (their button color #4e321e) */
+  --color-coral: #4e321e;
+  --color-coral-dark: #38240f;
+  --color-coral-soft: #e9dbc9;
+  /* Brand — secondary = sage green (#698e62 / #afc5ab) */
+  --color-teal: #56744a;
+  --color-teal-soft: #d8e3d0;
+  --color-butter: #edca8c;
+  --color-blush: #ecdac4;
+
+  /* Lines */
+  --color-line: #e7dcc9;
+
+  /* Type — Cabin headings, Quicksand body, Amatic SC accents */
+  --font-display: var(--font-cabin);
+  --font-sans: var(--font-quicksand);
+  --font-accent: var(--font-amatic);
+
+  /* Radius */
+  --radius-xl: 1.25rem;
+  --radius-2xl: 1.75rem;
+  --radius-3xl: 2.25rem;
+
+  /* Easing */
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: var(--color-cream);
+  --foreground: var(--color-ink);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+* {
+  border-color: var(--color-line);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 1.0625rem; /* ~17px base — grandma-friendly */
+  line-height: 1.6;
+}
+
+/* Display headings — Cabin */
+.font-display {
+  font-family: var(--font-display), "Trebuchet MS", system-ui, sans-serif;
+  font-optical-sizing: auto;
+  letter-spacing: -0.018em; /* tighter tracking reads premium at display sizes */
+}
+
+/* Modern typographic niceties, applied site-wide with zero per-component churn */
+h1,
+h2,
+h3 {
+  text-wrap: balance; /* avoids lonely orphan words in headlines */
+}
+p {
+  text-wrap: pretty;
+}
+
+/* Playful storybook accent — Amatic SC (eyebrows, hero flourishes) */
+.font-accent {
+  font-family: var(--font-accent), "Comic Sans MS", cursive;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+/* Big readable focus rings for accessibility */
+:focus-visible {
+  outline: 3px solid var(--color-coral);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+/* ------------------------------------------------------------------ *
+ *  Elevation system — layered, light-aware shadows (warm espresso tint).
+ *  Components already use .shadow-soft / .shadow-lift / .bg-paper-card,
+ *  so upgrading these lifts the whole app at once.
+ * ------------------------------------------------------------------ */
+.bg-paper-card {
+  background: var(--color-paper);
+  box-shadow:
+    0 1px 1px rgba(44, 34, 24, 0.04),
+    0 4px 10px -3px rgba(44, 34, 24, 0.06),
+    0 18px 44px -16px rgba(44, 34, 24, 0.16);
+}
+
+.shadow-soft {
+  box-shadow:
+    0 1px 1px rgba(44, 34, 24, 0.04),
+    0 5px 12px -4px rgba(44, 34, 24, 0.08),
+    0 18px 44px -16px rgba(44, 34, 24, 0.18);
+}
+
+.shadow-lift {
+  box-shadow:
+    0 2px 4px rgba(44, 34, 24, 0.05),
+    0 12px 26px -8px rgba(44, 34, 24, 0.14),
+    0 36px 70px -24px rgba(44, 34, 24, 0.32);
+}
+
+/* Frosted glass — uses color-mix so it tracks the live theme tokens */
+.glass {
+  background: color-mix(in srgb, var(--color-paper) 68%, transparent);
+  backdrop-filter: blur(18px) saturate(165%);
+  -webkit-backdrop-filter: blur(18px) saturate(165%);
+  border: 1px solid color-mix(in srgb, white 55%, var(--color-line));
+  box-shadow:
+    0 10px 34px -14px rgba(44, 34, 24, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+/* Animated underline for nav / inline links (GPU-cheap: background-size only) */
+.link-underline {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 0% 2px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: background-size 0.35s var(--ease-out-soft);
+}
+.link-underline:hover,
+.link-underline:focus-visible {
+  background-size: 100% 2px;
+}
+
+/* Smooth scroll base (Lenis adds the rest) */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+/* Respect reduced motion globally */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Hide scrollbars on horizontal strips */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Storybook page texture */
+.page-paper {
+  background-color: #fffdf8;
+  background-image: radial-gradient(
+    circle at 30% 20%,
+    rgba(237, 202, 140, 0.14),
+    transparent 60%
+  );
+}
+
+/* ------------------------------------------------------------------ *
+ *  FX layer — Apple × Framer flourishes
+ * ------------------------------------------------------------------ */
+
+/* Animated gradient-mesh background */
+.mesh {
+  background-color: var(--color-cream);
+  background-image:
+    radial-gradient(at 12% 18%, rgba(78, 50, 30, 0.14) 0px, transparent 50%),
+    radial-gradient(at 86% 12%, rgba(105, 142, 98, 0.2) 0px, transparent 50%),
+    radial-gradient(at 78% 82%, rgba(237, 202, 140, 0.34) 0px, transparent 50%),
+    radial-gradient(at 20% 88%, rgba(175, 197, 171, 0.4) 0px, transparent 50%);
+}
+.mesh-dark {
+  background-color: #1c140d;
+  background-image:
+    radial-gradient(at 14% 20%, rgba(160, 110, 66, 0.4) 0px, transparent 55%),
+    radial-gradient(at 84% 16%, rgba(105, 142, 98, 0.34) 0px, transparent 55%),
+    radial-gradient(at 75% 85%, rgba(175, 197, 171, 0.3) 0px, transparent 55%),
+    radial-gradient(at 25% 90%, rgba(237, 202, 140, 0.26) 0px, transparent 55%);
+}
+
+/* Aurora — soft drifting light blobs behind hero/feature sections.
+   Pure transform/opacity animation = no layout shift, no paint storms. */
+.aurora {
+  position: relative;
+  isolation: isolate;
+}
+.aurora::before {
+  content: "";
+  position: absolute;
+  inset: -25%;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      38% 48% at 18% 28%,
+      color-mix(in srgb, var(--color-coral) 26%, transparent),
+      transparent 70%
+    ),
+    radial-gradient(
+      44% 52% at 82% 18%,
+      color-mix(in srgb, var(--color-teal) 26%, transparent),
+      transparent 70%
+    ),
+    radial-gradient(
+      52% 60% at 62% 88%,
+      color-mix(in srgb, var(--color-butter) 42%, transparent),
+      transparent 72%
+    );
+  filter: blur(46px);
+  animation: aurora-drift 20s ease-in-out infinite alternate;
+  will-change: transform;
+}
+@keyframes aurora-drift {
+  0% {
+    transform: translate3d(-2%, -1%, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(2%, 2%, 0) scale(1.08) rotate(1.5deg);
+  }
+  100% {
+    transform: translate3d(-1%, 1.5%, 0) scale(1.04) rotate(-1deg);
+  }
+}
+
+/* Film grain overlay */
+.grain::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  opacity: 0.04;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Infinite marquee */
+@keyframes marquee-x {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee-x var(--marquee-duration, 40s) linear infinite;
+}
+.marquee-track.reverse {
+  animation-direction: reverse;
+}
+.marquee:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+/* Shine sweep for cards */
+@keyframes shine {
+  to {
+    transform: translateX(220%) skewX(-18deg);
+  }
+}
+
+/* Gradient text */
+.text-gradient {
+  background: linear-gradient(100deg, #7a5230, #4e321e 38%, #56744a 74%, #698e62);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* 3D helpers */
+.preserve-3d {
+  transform-style: preserve-3d;
+}
+.perspective {
+  perspective: 1200px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track {
+    animation: none !important;
+  }
 }
