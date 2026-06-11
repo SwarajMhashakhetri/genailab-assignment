@@ -86,18 +86,30 @@ export function StudioProvider({ children }: { children: ReactNode }) {
     age,
     style,
     generatedImage,
+    // Changing the photo, story, or style makes any previously generated art
+    // stale — drop it so the preview repaints instead of showing the old one.
+    // (Name/age tweaks only touch the story text, which rebuilds on render,
+    // so they don't burn a regeneration.)
     setPhoto: (f, url) => {
       setFile(f);
       setPhotoUrl(url);
+      setGeneratedImage(null);
     },
     clearPhoto: () => {
       setFile(null);
       setPhotoUrl(null);
+      setGeneratedImage(null);
     },
-    setStory: (s) => setStoryState(s),
+    setStory: (s) => {
+      if (s !== story) setGeneratedImage(null);
+      setStoryState(s);
+    },
     setName,
     setAge,
-    setStyle: (s) => setStyleState(s),
+    setStyle: (s) => {
+      if (s !== style) setGeneratedImage(null);
+      setStyleState(s);
+    },
     setGeneratedImage,
     next: () => setStep((s) => Math.min(s + 1, STEPS.length - 1)),
     back: () => setStep((s) => Math.max(s - 1, 0)),

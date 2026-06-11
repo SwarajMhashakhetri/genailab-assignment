@@ -28,7 +28,7 @@ const STYLE_MODIFIERS: Record<StyleId, string> = {
   watercolor:
     "ART STYLE — Hand-painted watercolor. Completely re-paint the entire scene as a traditional watercolor painting: visible brush strokes, soft pigment washes that bleed into one another, textured watercolor-paper grain, loose painterly edges, an airy pastel palette. Every part of the image must look painted by hand — NOT a photograph and NOT a digital cartoon.",
   realistic:
-    "ART STYLE — Lifelike illustrated portrait. Render as a richly detailed, semi-realistic painterly portrait: natural lighting, true-to-life skin tones and fine textures, soft cinematic depth of field, polished and warm. Detailed and realistic, while still feeling like a crafted storybook artwork.",
+    "ART STYLE — Lifelike. Render the entire scene as a true-to-life, photographic-quality image: natural skin tones, real hair and fabric texture, soft golden-hour lighting, gentle cinematic depth of field — like a frame from a beautifully shot live-action family film. It must look genuinely real and lifelike — NOT a cartoon, NOT a drawing, NOT a painting.",
 };
 
 export function buildPrompt({

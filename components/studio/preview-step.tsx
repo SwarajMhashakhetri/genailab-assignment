@@ -57,6 +57,10 @@ export function PreviewStep() {
   // never shows a stale illustration after a style change.
   const [version, setVersion] = useState(0);
   const startedRef = useRef(false);
+  // Art already painted this visit, keyed by style — switching back to a style
+  // you've seen is instant (and free) instead of a fresh 30s generation. The
+  // cache dies with this step, so a new photo/story always repaints.
+  const styleCacheRef = useRef<Partial<Record<StyleId, string>>>({});
 
   const generate = useCallback(
     async (styleOverride?: StyleId) => {
@@ -80,6 +84,7 @@ export function PreviewStep() {
 
         if (!res.ok) throw new Error(data.error || "Generation failed");
 
+        styleCacheRef.current[useStyle] = data.image;
         setGeneratedImage(data.image);
         setVersion((v) => v + 1);
         setStatus("done");
@@ -118,6 +123,14 @@ export function PreviewStep() {
   const handleStyleSwitch = (id: StyleId) => {
     if (id === style || status === "loading") return;
     setStyle(id);
+    const cached = styleCacheRef.current[id];
+    if (cached) {
+      // Seen this style already — swap it in instantly.
+      setGeneratedImage(cached);
+      setVersion((v) => v + 1);
+      setStatus("done");
+      return;
+    }
     generate(id);
   };
 
